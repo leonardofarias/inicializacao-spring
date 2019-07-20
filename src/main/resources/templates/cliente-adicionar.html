@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Adicionar Cliente</title>
+
+</head>
+<body>
+    <form th:action="@{/cliente-form}" method="post">
+        Nome: <input name="nome"/><br />
+        CPF: <input name="cpf" /><br />
+        <input type="submit" value="Adicionar" />
+    </form>
+
+    <label th:text="${erro}" style="color:red;"></label>
+</body>
+</html>

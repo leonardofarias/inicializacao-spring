@@ -8,8 +8,12 @@
     <ul th:each="cli : ${clientes}">
         <div th:object="${cli}">
             <span th:text="*{nome + ': ' + cpf}">...</span>
+
+            <a th:href="@{/cliente-excluir(id=${cli.id})}">X</a>
         </div>
     </ul>
+
+    <a href="/cliente-adicionar">Adicionar</a>
 
 </body>
 </html>
