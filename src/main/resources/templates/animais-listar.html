@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Animais</title>
+</head>
+<body>
+
+    <h1 th:text="${sistema}"></h1>
+
+    <h1>Animais</h1>
+
+    <ul th:each="animal : ${animais}">
+        <div th:object="${animal}">
+                <span th:text="*{nome + ': ' + dataNascimento + ' - ' + especie }">...</span>
+            <a th:href="@{/animal-excluir(clientId=${animal.clientId}, nome=${animal.nome})}">X</a>
+        </div>
+    </ul>
+
+    <a th:href="@{/animal-adicionar(clientId=${param.clientId})}">Adicionar</a>
+
+</body>
+</html>

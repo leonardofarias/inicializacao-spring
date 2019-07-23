@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Adicionar Animal</title>
+
+</head>
+<body>
+    <form th:action="@{/animal-form}" method="post">
+        Nome: <input name="nome"/><br />
+        Nascimento: <input type="date" name="dataNascimento" /><br />
+        Espécie:
+        <select name="especie">
+            <option th:each="especie : ${especies}"
+                    th:value="${especie}"
+                    th:text="${especie}"></option>
+        </select>
+
+        <input type="hidden" name="clientId" th:value="${param.clientId}"><br />
+        <input type="submit" value="Adicionar" />
+    </form>
+
+    <label th:text="${erro}" style="color:red;"></label>
+</body>
+</html>
