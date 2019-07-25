@@ -41,13 +41,14 @@ public class AnimalController {
     }
 
     @PostMapping("/animal-form")
-    public RedirectView animalForm(Animal animal, Model model) {
+    public String animalForm(Animal animal, Model model) {
         try {
             animalService.adicionar(animal);
+            return String.format("redirect:/animais-listar?clientId=%s", animal.getClientId());
         } catch (BusinessException e) {
-            model.addAttribute("erro: ", e.getMessage());
+            model.addAttribute("erro", e.getMessage());
+            return paginaAdicionar(model);
         }
-        return new RedirectView("/animais-listar?clientId=" + animal.getClientId());
     }
 
     @GetMapping("/animal-excluir")

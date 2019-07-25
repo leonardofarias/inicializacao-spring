@@ -1,6 +1,7 @@
 package br.com.tt.petshop.service;
 
 import br.com.tt.petshop.exception.BusinessException;
+import br.com.tt.petshop.model.Animal;
 import br.com.tt.petshop.model.Cliente;
 import br.com.tt.petshop.repository.ClienteRepository;
 import org.springframework.stereotype.Service;
@@ -65,5 +66,17 @@ public class ClienteService {
         Cliente cliente = new Cliente();
         cliente.setId(id);
         clienteRepository.delete(cliente);
+    }
+
+    public Cliente buscarCliente(Long id){
+        return clienteRepository.findById(id);
+    }
+
+    public void validaClienteInadimplente(Long clientId) throws BusinessException {
+        Cliente cliente = buscarCliente(clientId);
+
+        if(cliente.getInadimplente()){
+            throw new BusinessException("Cliente inadimplente");
+        }
     }
 }

@@ -4,8 +4,6 @@ import br.com.tt.petshop.enums.EspecieEnum;
 import br.com.tt.petshop.model.Animal;
 import org.springframework.stereotype.Repository;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +14,7 @@ public class AnimalRepository {
 
     List<Animal> animais = new ArrayList<>(Arrays.asList(
             new Animal("Rex", LocalDate.now(), EspecieEnum.MAMIFERO, 1L),
-            new Animal("Nemo", LocalDate.now().minusMonths(1), EspecieEnum.PEIXE, 1L)
+            new Animal("Nemo", LocalDate.now().minusMonths(1), EspecieEnum.PEIXE, 2L)
     ));
 
     public List<Animal> listar(Long clientId) {

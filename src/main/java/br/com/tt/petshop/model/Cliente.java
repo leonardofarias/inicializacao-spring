@@ -7,13 +7,17 @@ public class Cliente {
     private Long id;
     private String nome;
     private String cpf;
+    private Boolean inadimplente;
 
-    public Cliente(){}
+    public Cliente(){
+        this.inadimplente = Boolean.FALSE;
+    }
 
-    public Cliente(Long id, String nome, String cpf) {
+    public Cliente(Long id, String nome, String cpf, Boolean inadimplente) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
+        this.inadimplente = Boolean.FALSE;
     }
 
     public String getNome() {
@@ -38,6 +42,14 @@ public class Cliente {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Boolean getInadimplente() {
+        return Objects.nonNull(inadimplente) && inadimplente;
+    }
+
+    public void setInadimplente(Boolean inadimplente) {
+        this.inadimplente = inadimplente;
     }
 
     @Override

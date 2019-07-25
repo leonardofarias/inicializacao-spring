@@ -6,7 +6,7 @@
 
 </head>
 <body>
-    <form th:action="@{/animal-form}" method="post">
+    <form th:action="@{/animal-form(clientId=${param.clientId})}" method="post">
         Nome: <input name="nome"/><br />
         Nascimento: <input type="date" name="dataNascimento" /><br />
         Espécie:
@@ -21,5 +21,10 @@
     </form>
 
     <label th:text="${erro}" style="color:red;"></label>
+
+    <br />
+
+    <a th:href="@{/animais-listar(clientId=${param.clientId})}">Voltar</a>
+
 </body>
 </html>
