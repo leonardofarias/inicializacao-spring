@@ -13,8 +13,8 @@ import java.util.List;
 public class ClienteRepository {
 
     List<Cliente> clientes = new ArrayList<>(Arrays.asList(
-        new Cliente(1L,"Leonardo", "01773449036",true),
-        new Cliente(2L,"Juca", "02146188030", false)));
+        new Cliente(3L,"Leonardo", "01773449036",true),
+        new Cliente(4L,"Juca", "02146188030", false)));
 
     public List<Cliente> findAll() {
         return clientes;
@@ -34,13 +34,19 @@ public class ClienteRepository {
     }
 
     public Cliente findById(Long id){
-        Cliente cliente = new Cliente();
+        /*Cliente cliente = new Cliente();
         cliente.setId(id);
         int posicao = clientes.indexOf(cliente);
         if(posicao > 0){
             return clientes.get(posicao);
         }else{
             return null;
+        }*/
+        for (Cliente cliente: clientes) {
+            if(cliente.getId().equals(id)){
+                return cliente;
+            }
         }
+        return null;
     }
 }
