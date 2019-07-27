@@ -17,7 +17,7 @@ public class Cliente {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
-        this.inadimplente = Boolean.FALSE;
+        this.inadimplente = inadimplente;
     }
 
     public String getNome() {

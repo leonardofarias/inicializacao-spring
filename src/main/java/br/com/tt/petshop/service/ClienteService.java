@@ -25,7 +25,6 @@ public class ClienteService {
     public void adicionar(Cliente cli) throws BusinessException {
         validaNome(cli);
         validaCpf(cli);
-
         clienteRepository.save(cli);
 
     }
