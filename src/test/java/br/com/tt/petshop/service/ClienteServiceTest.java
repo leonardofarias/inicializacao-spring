@@ -82,9 +82,9 @@ public class ClienteServiceTest {
     @Test
     public void deveriaLancarExcecaoQuandoNomeEstaVazio(){
         try {
-            //Act
             Cliente clienteAdicionado = new Cliente(1L, null, "01773449036", false);
             clienteService.adicionar(clienteAdicionado);
+
             fail("Deveria lançar exceção quando nome esta vazio");
         } catch (BusinessException e) {
             assertEquals(e.getMessage(), "Cliente inválido");
@@ -94,9 +94,9 @@ public class ClienteServiceTest {
     @Test
     public void deveriaLancarExcecaoQuandoNomeTemMenosDeDuasLetras(){
         try {
-            //Act
             Cliente clienteAdicionado = new Cliente(1L, "L", "01773449036", false);
             clienteService.adicionar(clienteAdicionado);
+
             fail("Deveria lançar exceção quando nome tem menos de duas letras");
         } catch (BusinessException e) {
             assertEquals(e.getMessage(), "Nome inválido");
@@ -106,9 +106,9 @@ public class ClienteServiceTest {
     @Test
     public void deveriaLancarExcecaoQuandoNomeNaoTemSobrenomeeTemMaisDeDuasLetras(){
         try {
-            //Act
             Cliente clienteAdicionado = new Cliente(1L, "Le", "01773449036", false);
             clienteService.adicionar(clienteAdicionado);
+
             fail("Deveria lançar exceção quando nome não tem sobrenome e tem mais de duas letras");
         } catch (BusinessException e) {
             assertEquals(e.getMessage(), "Nome deve conter nome e sobrenome e cada um deve conter mais de duas letras");
@@ -118,9 +118,9 @@ public class ClienteServiceTest {
     @Test
     public void deveriaLancarExcecaoQuandoCpfEstaVazio(){
         try {
-            //Act
             Cliente clienteAdicionado = new Cliente(1L, "Leonardo Silva", null, false);
             clienteService.adicionar(clienteAdicionado);
+
             fail("Deveria lançar exceção quando cpf está vazio");
         } catch (BusinessException e) {
             assertEquals(e.getMessage(), "Cliente inválido");
@@ -130,9 +130,9 @@ public class ClienteServiceTest {
     @Test
     public void deveriaLancarExcecaoQuandoCpfEstaIncorreto(){
         try {
-            //Act
             Cliente clienteAdicionado = new Cliente(1L, "Leonardo Silva", "0177349", false);
             clienteService.adicionar(clienteAdicionado);
+
             fail("Deveria lançar exceção quando cpf está incorreto");
         } catch (BusinessException e) {
             assertEquals(e.getMessage(), "CPF inválido");
@@ -141,10 +141,8 @@ public class ClienteServiceTest {
 
     @Test
     public void deveriaBuscarClienteComSucesso() {
-        //Act
         clienteService.buscarCliente(12L);
 
-        //Assert
         Cliente clienteBuscar = new Cliente(12L, null, null, false);
         verify(clienteRepository).findById(clienteBuscar.getId());
     }
@@ -154,9 +152,8 @@ public class ClienteServiceTest {
         Cliente cliente = new Cliente(12L, null, null, true);
         when(clienteRepository.findById(12l)).thenReturn(cliente);
         try {
-            //Act
             clienteService.validaClienteInadimplente(12L);
-            //Assert
+
             fail("Deveria retornar cliente inadimplente");
         } catch (BusinessException e) {
             assertEquals(e.getMessage(), "Cliente inadimplente");
@@ -169,9 +166,8 @@ public class ClienteServiceTest {
         Cliente cliente = new Cliente(12L, null, null, false);
         when(clienteRepository.findById(12l)).thenReturn(cliente);
         try {
-            //Act
             clienteService.validaClienteInadimplente(12L);
-            //Assert
+
             verify(clienteRepository).findById(12L);
         } catch (BusinessException e) {
             assertEquals(e.getMessage(), "Cliente inadimplente");
