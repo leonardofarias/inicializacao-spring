@@ -71,8 +71,8 @@ public class ClienteServiceTest {
 
     @Test
     public void deveriaAdicionarComSucesso() throws BusinessException {
-        //Act
         Cliente clienteAdicionado = new Cliente(1L, "Leonardo Silva", "01773449036", false);
+        //Act
         clienteService.adicionar(clienteAdicionado);
 
         //Assert
