@@ -139,7 +139,7 @@ public class ClienteServiceTest {
   @Test
   public void deveriaBuscarClienteComSucesso() {
     // Arrange - Setup
-      Cliente cliente = new Cliente(1L, "Fulano", "000.111.222-33", false);
+    Cliente cliente = new Cliente(1L, "Fulano", "000.111.222-33", false);
     when(clienteRepository.findById(1L)).thenReturn(cliente);
 
     // Act
