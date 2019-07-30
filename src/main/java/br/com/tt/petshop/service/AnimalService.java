@@ -4,12 +4,10 @@ import br.com.tt.petshop.enums.EspecieEnum;
 import br.com.tt.petshop.exception.BusinessException;
 import br.com.tt.petshop.model.Animal;
 
-import br.com.tt.petshop.model.Cliente;
 import br.com.tt.petshop.repository.AnimalRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,7 +28,7 @@ public class AnimalService {
     }
 
     public List<EspecieEnum> listarEspecies(){
-        return Arrays.asList(EspecieEnum.values());
+        return animalRepository.listarEspecies();
     }
 
     public void adicionar(Animal animal) throws BusinessException {

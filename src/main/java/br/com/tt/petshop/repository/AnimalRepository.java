@@ -34,4 +34,8 @@ public class AnimalRepository {
     public void delete(Animal animal){
         animais.remove(animal);
     }
+
+    public List<EspecieEnum> listarEspecies() {
+        return Arrays.asList(EspecieEnum.values());
+    }
 }
