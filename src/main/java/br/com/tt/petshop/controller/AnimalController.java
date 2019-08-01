@@ -5,6 +5,7 @@ import br.com.tt.petshop.exception.BusinessException;
 import br.com.tt.petshop.model.Animal;
 import br.com.tt.petshop.service.AnimalService;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,10 +53,10 @@ public class AnimalController {
     }
 
     @GetMapping("/animal-excluir")
-    public RedirectView clienteExcluir(@RequestParam Long idAnimal){
+    public RedirectView clienteExcluir(@RequestParam Long idAnimal, @RequestParam Long clientId){
         Animal animal = new Animal();
         animal.setIdAnimal(idAnimal);
         animalService.remover(animal);
-        return new RedirectView("/animais-listar?clientId=" + animal.getClientId());
+        return new RedirectView("/animais-listar?clientId=" + clientId);
     }
 }
