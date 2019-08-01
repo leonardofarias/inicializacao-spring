@@ -1,0 +1,2 @@
+INSERT INTO TB_CLIENTE VALUES (null, 'Fulano da Silva', '000.111.222-33', FALSE);
+INSERT INTO TB_CLIENTE VALUES (null, 'Ciclano Santos', '111.222.333-44', FALSE);

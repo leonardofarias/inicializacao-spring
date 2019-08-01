@@ -8,6 +8,7 @@ import br.com.tt.petshop.repository.AnimalRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,11 +25,11 @@ public class AnimalService {
     }
 
     public List<Animal> listar(Long clientId){
-        return animalRepository.listar(clientId);
+        return animalRepository.findByClientId(clientId);
     }
 
     public List<EspecieEnum> listarEspecies(){
-        return animalRepository.listarEspecies();
+        return Arrays.asList(EspecieEnum.values());
     }
 
     public void adicionar(Animal animal) throws BusinessException {

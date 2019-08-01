@@ -139,7 +139,7 @@ public class ClienteServiceTest {
     public void deveriaBuscarClienteComSucesso() {
         // Arrange - Setup
         Cliente cliente = new Cliente(1L, "Fulano", "000.111.222-33", false);
-        when(clienteRepository.findById(1L)).thenReturn(cliente);
+        when(clienteRepository.getOne(1L)).thenReturn(cliente);
 
         // Act
         Cliente find = clienteService.buscarCliente(1L);
@@ -153,23 +153,23 @@ public class ClienteServiceTest {
     @Test
     public void deveriaLancarExcecaoQuandoClienteEstaInadimplente() {
         Cliente cliente = new Cliente(12L, null, null, true);
-        when(clienteRepository.findById(12l)).thenReturn(cliente);
+        when(clienteRepository.getOne(12l)).thenReturn(cliente);
         try {
             clienteService.validaClienteInadimplente(12L);
             fail("Deveria retornar cliente inadimplente");
         } catch (BusinessException e) {
             assertEquals("Cliente inadimplente", e.getMessage());
         }
-        verify(clienteRepository).findById(12L);
+        verify(clienteRepository).getOne(12L);
     }
 
     @Test
     public void deveriaRetornarOkQuandoClienteEstaAdimplente() {
         Cliente cliente = new Cliente(12L, null, null, false);
-        when(clienteRepository.findById(12l)).thenReturn(cliente);
+        when(clienteRepository.getOne(12l)).thenReturn(cliente);
         try {
             clienteService.validaClienteInadimplente(12L);
-            verify(clienteRepository).findById(12L);
+            verify(clienteRepository).getOne(12L);
         } catch (BusinessException e) {
             assertEquals("Cliente inadimplente", e.getMessage());
         }

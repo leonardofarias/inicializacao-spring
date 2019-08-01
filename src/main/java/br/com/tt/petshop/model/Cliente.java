@@ -1,12 +1,24 @@
 package br.com.tt.petshop.model;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name = "TB_CLIENTE")
 public class Cliente {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
     private Long id;
+
+    @Column(name = "NOME_CLIENTE")
     private String nome;
+
+    @Column(name = "CPF_CLIENTE")
     private String cpf;
+
+    @Column(name = "INADIMPLENTE")
     private Boolean inadimplente;
 
     public Cliente(){

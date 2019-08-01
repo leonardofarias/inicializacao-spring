@@ -35,10 +35,11 @@ public class ClienteController {
     public String clientForm(Cliente cli, Model model) {
         try {
             clienteService.adicionar(cli);
+            return "redirect:/";
         } catch (BusinessException e) {
-            model.addAttribute("erro: ", e.getMessage());
+            model.addAttribute("erro", e.getMessage());
+            return paginaAdicionar(model);
         }
-        return "redirect:/";
     }
 
     @GetMapping("/cliente-excluir")

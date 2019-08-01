@@ -68,7 +68,7 @@ public class ClienteService {
     }
 
     public Cliente buscarCliente(Long id){
-        return clienteRepository.findById(id);
+        return clienteRepository.getOne(id);
     }
 
     public void validaClienteInadimplente(Long clientId) throws BusinessException {
