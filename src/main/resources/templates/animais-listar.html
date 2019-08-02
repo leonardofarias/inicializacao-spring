@@ -12,7 +12,7 @@
 
     <ul th:each="animal : ${animais}">
         <div th:object="${animal}">
-                <span th:text="*{nome + ': ' + dataNascimento + ' - ' + especie }">...</span>
+                <span th:text="*{nome + ': ' + dataNascimento.data + ' - ' + especie }">...</span>
             <a th:href="@{/animal-excluir(idAnimal=${animal.idAnimal},clientId=${animal.clientId})}">X</a>
         </div>
     </ul>

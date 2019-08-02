@@ -48,15 +48,15 @@ public class ClienteService {
     }
 
     private void validaCpf(Cliente cli) throws BusinessException {
-        if (Objects.isNull(cli) || Objects.isNull(cli.getCpf())) {
+        if (Objects.isNull(cli) || Objects.isNull(cli.getCpf().getValor())) {
             throw new BusinessException("Cliente inválido");
         }
 
-        String cpfTest = cli.getCpf().replaceAll("[^\\d]", "");
-        if (cpfTest.length() < 11) {
+        //String cpfTest = cli.getCpf().replaceAll("[^\\d]", "");
+        if (!cli.getCpf().isValid()) {
             throw new BusinessException("CPF inválido");
-        }else{
-            cli.setCpf(cpfTest);
+        // }else{
+        //     cli.setCpf(cpfTest);
         }
     }
 

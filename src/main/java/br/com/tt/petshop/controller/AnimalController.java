@@ -5,7 +5,6 @@ import br.com.tt.petshop.exception.BusinessException;
 import br.com.tt.petshop.model.Animal;
 import br.com.tt.petshop.service.AnimalService;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,6 +33,9 @@ public class AnimalController {
     @GetMapping("/animal-adicionar")
     public String paginaAdicionar(Model model) {
         model.addAttribute("especies", listarEspecies());
+        if(model.containsAttribute("animal") == false){
+            model.addAttribute("animal", new Animal());
+        }
         return "animal-adicionar";
     }
 

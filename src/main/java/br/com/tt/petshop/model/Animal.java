@@ -1,7 +1,7 @@
 package br.com.tt.petshop.model;
 
 import br.com.tt.petshop.enums.EspecieEnum;
-import org.springframework.format.annotation.DateTimeFormat;
+import br.com.tt.petshop.model.vo.DataNascimento;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -15,18 +15,21 @@ public class Animal {
     @Column(name = "codigo")
     private Long idAnimal;
     private String nome;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate dataNascimento;
+
+    @Embedded
+    private DataNascimento dataNascimento;
     @Enumerated(EnumType.STRING)
     private EspecieEnum especie;
     private Long clientId;
 
-    public Animal(){}
+    public Animal(){
+        this.dataNascimento = new DataNascimento();
+    }
 
-    public Animal(Long idAnimal, String nome, LocalDate dataNascimento, EspecieEnum especie, Long clientId) {
+    public Animal(Long idAnimal, String nome, LocalDate data, EspecieEnum especie, Long clientId) {
         this.idAnimal = idAnimal;
         this.nome = nome;
-        this.dataNascimento = dataNascimento;
+        this.dataNascimento = new DataNascimento(data);
         this.especie = especie;
         this.clientId = clientId;
     }
@@ -39,11 +42,11 @@ public class Animal {
         this.nome = nome;
     }
 
-    public LocalDate getDataNascimento() {
+    public DataNascimento getDataNascimento() {
         return dataNascimento;
     }
 
-    public void setDataNascimento(LocalDate dataNascimento) {
+    public void setDataNascimento(DataNascimento dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
 

@@ -49,7 +49,7 @@ public class AnimalServiceTest {
         // Arrange - Setup
 //        List<Animal> listaAnimais = new ArrayList<>(Arrays.asList(
 //                new Animal(0L, "Rex", LocalDate.now(), EspecieEnum.MAMIFERO, 1L)));
-//        when(animalRepository.listar(1L)).thenReturn(listaAnimais);
+//        when(animalRepository.findAll()).thenReturn(listaAnimais);
 //
 //        // Act - Execução
 //        List<Animal> animais = animalService.listar(1L);

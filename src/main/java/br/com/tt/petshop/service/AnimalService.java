@@ -41,11 +41,11 @@ public class AnimalService {
     }
 
     private void validaDataNascimentoMenorIgualHoje(Animal animal) throws BusinessException {
-        if (Objects.isNull(animal) || Objects.isNull(animal.getDataNascimento())){
+        if (Objects.isNull(animal) || Objects.isNull(animal.getDataNascimento().getData())){
             throw new BusinessException("Data inválida");
         }
 
-        if(LocalDate.now().isBefore(animal.getDataNascimento())){
+        if(animal.getDataNascimento().isValid()){
             throw new BusinessException("Data não pode ser superior a hoje");
         }
 

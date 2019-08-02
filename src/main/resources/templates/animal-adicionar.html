@@ -8,7 +8,7 @@
 <body>
     <form th:action="@{/animal-form(clientId=${param.clientId})}" method="post">
         Nome: <input name="nome"/><br />
-        Nascimento: <input type="date" name="dataNascimento" /><br />
+        Nascimento: <input type="date" name="dataNascimento" th:field="${animal.dataNascimento.data}" /><br />
         Espécie:
         <select name="especie">
             <option th:each="especie : ${especies}"

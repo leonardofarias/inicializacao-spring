@@ -2,6 +2,7 @@ package br.com.tt.petshop.model;
 
 import javax.persistence.*;
 import java.util.Objects;
+import br.com.tt.petshop.model.vo.Cpf;
 
 @Entity
 @Table(name = "TB_CLIENTE")
@@ -15,8 +16,8 @@ public class Cliente {
     @Column(name = "NOME_CLIENTE")
     private String nome;
 
-    @Column(name = "CPF_CLIENTE")
-    private String cpf;
+    @Embedded
+    private Cpf cpf;
 
     @Column(name = "INADIMPLENTE")
     private Boolean inadimplente;
@@ -28,7 +29,7 @@ public class Cliente {
     public Cliente(Long id, String nome, String cpf, Boolean inadimplente) {
         this.id = id;
         this.nome = nome;
-        this.cpf = cpf;
+        this.cpf = new Cpf(cpf);
         this.inadimplente = inadimplente;
     }
 
@@ -40,20 +41,20 @@ public class Cliente {
         this.nome = nome;
     }
 
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Cpf getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(Cpf cpf) {
+        this.cpf = cpf;
     }
 
     public Boolean getInadimplente() {

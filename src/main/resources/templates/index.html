@@ -7,7 +7,7 @@
 
     <ul th:each="cli : ${clientes}">
         <div th:object="${cli}">
-            <span th:text="*{nome + ': ' + cpf}">
+            <span th:text="*{nome + ': ' + cpf.valor}">
 
             </span>
 
