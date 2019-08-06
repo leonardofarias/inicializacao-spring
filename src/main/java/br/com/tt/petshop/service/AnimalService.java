@@ -4,6 +4,7 @@ import br.com.tt.petshop.enums.EspecieEnum;
 import br.com.tt.petshop.exception.BusinessException;
 import br.com.tt.petshop.model.Animal;
 
+import br.com.tt.petshop.model.Cliente;
 import br.com.tt.petshop.repository.AnimalRepository;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +25,8 @@ public class AnimalService {
         this.clienteService = clienteService;
     }
 
-    public List<Animal> listar(Long clientId){
-        return animalRepository.findByClientId(clientId);
+    public List<Animal> listar(Long clienteId){
+        return animalRepository.findByClienteId(clienteId);
     }
 
     public List<EspecieEnum> listarEspecies(){
@@ -35,7 +36,7 @@ public class AnimalService {
     public void adicionar(Animal animal) throws BusinessException {
         validaNome(animal);
         validaDataNascimentoMenorIgualHoje(animal);
-        clienteService.validaClienteInadimplente(animal.getClientId());
+        clienteService.validaClienteInadimplente(animal.getCliente().getId());
 
         animalRepository.save(animal);
     }

@@ -1,6 +1,7 @@
 package br.com.tt.petshop.model;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 import br.com.tt.petshop.model.vo.Cpf;
 
@@ -21,6 +22,13 @@ public class Cliente {
 
     @Column(name = "INADIMPLENTE")
     private Boolean inadimplente;
+
+    @OneToMany(mappedBy = "cliente")
+    private List<Animal> animais;
+
+    @ManyToOne
+    @JoinColumn(name = "ID_UNIDADE")
+    private Unidade unidade;
 
     public Cliente(){
         this.inadimplente = Boolean.FALSE;
@@ -63,6 +71,22 @@ public class Cliente {
 
     public void setInadimplente(Boolean inadimplente) {
         this.inadimplente = inadimplente;
+    }
+
+    public List<Animal> getAnimais() {
+        return animais;
+    }
+
+    public void setAnimais(List<Animal> animais) {
+        this.animais = animais;
+    }
+
+    public Unidade getUnidade() {
+        return unidade;
+    }
+
+    public void setUnidade(Unidade unidade) {
+        this.unidade = unidade;
     }
 
     @Override

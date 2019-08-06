@@ -47,7 +47,7 @@ public class AnimalController {
     public String animalForm(Animal animal, Model model) {
         try {
             animalService.adicionar(animal);
-            return String.format("redirect:/animais-listar?clientId=%s", animal.getClientId());
+            return String.format("redirect:/animais-listar?clientId=%s", animal.getCliente().getId());
         } catch (BusinessException e) {
             model.addAttribute("erro", e.getMessage());
             return paginaAdicionar(model);
