@@ -4,6 +4,7 @@ import br.com.tt.petshop.enums.EspecieEnum;
 import br.com.tt.petshop.model.Animal;
 import org.hibernate.annotations.SQLDelete;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,11 @@ public class AnimalRepositoryIT {
 
     @Autowired
     private AnimalRepository animalRepository;
+
+    @Before
+    @Sql(value = "classpath:data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    public void setUp(){
+    }
 
     @Test
     public void deveriaRetornarListaVazia(){
