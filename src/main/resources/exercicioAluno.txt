@@ -1,0 +1,79 @@
+path param recurso seguindo de identificador
+
+GET /alunos
+200
+204 - se no content ou pode ser 200 com []
+400/401/403
+500
+503
+504
+599
+502
+
+POST /alunos
+200/204 Sem Location
+201 + Location
+203
+400/401/403/404/412/422
+500
+503
+504
+599
+502
+
+GET /alunos/{id}
+200
+400
+401
+403
+404
+500
+503
+504
+599
+502
+
+PUT /alunos/{id}
+204
+400
+401
+403
+404
+429
+500
+503
+504
+599
+502
+
+DELETE /alunos/{id}
+204
+400
+401
+403
+404
+500
+503
+504
+599
+502
+
+GET /alunos?nome={nome}&dataNascimento={dataNascimento}&orderBy={nome}||{dataNascimento}
+200
+204
+400
+401
+403
+404
+500
+503
+504
+599
+502
+
+seguro -> não afeta o recurso get head
+
+idempotente -> o retorno e ação são os mesmos, chamando n vezes!!!! get head put delete
+
+nenhum dos dois post patch
+

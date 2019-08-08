@@ -2,7 +2,6 @@ package br.com.tt.petshop.repository;
 
 import br.com.tt.petshop.enums.EspecieEnum;
 import br.com.tt.petshop.model.Animal;
-import org.hibernate.annotations.SQLDelete;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,19 +11,21 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
+@Sql(value = "classpath:limpar.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+@Sql(value = "classpath:insere_rex.sql")
 public class AnimalRepositoryIT {
+
+    @Before
+    public void setUp(){
+    }
 
     @Autowired
     private AnimalRepository animalRepository;
-
-    @Before
-    @Sql(value = "classpath:data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    public void setUp(){
-    }
 
     @Test
     public void deveriaRetornarListaVazia(){
@@ -35,7 +36,6 @@ public class AnimalRepositoryIT {
     }
 
     @Test
-    @Sql(value = "classpath:insere_rex.sql")
     public void deveriaRetornarUmAnimal() {
         List<Animal> list = animalRepository.findByClienteId(133L);
         Assert.assertEquals("Deveria retornar um animal", 1, list.size());
@@ -46,7 +46,6 @@ public class AnimalRepositoryIT {
     }
 
     @Test
-    @Sql(value = "classpath:insere_rex.sql")
     public void deveriaRetornarUmAnimalBuscandoPeloNomeAnimal() {
         List<Animal> list = animalRepository.findByNome("Rex");
         Assert.assertEquals("Deveria retornar um animal", 1, list.size());
@@ -56,4 +55,14 @@ public class AnimalRepositoryIT {
         Assert.assertEquals("Deveria ser um mamífero", EspecieEnum.MAMIFERO, rex.getEspecie());
     }
 
+    @Test
+    public void deveriaRetornarUmaListaDeAnimaisInformandoDataInicioDataFimEEspecie() {
+        LocalDate dataInicio = LocalDate.parse("2019-08-01");
+        LocalDate dataFim = LocalDate.parse("2019-09-01");
+        List<Animal> list = animalRepository.
+                findByDataNascimentoDataBetweenAndEspecie(dataInicio, dataFim, EspecieEnum.MAMIFERO);
+        Assert.assertEquals("Deveria retornar pelo menos um animal", 1, list.size());
+    }
+
 }
+

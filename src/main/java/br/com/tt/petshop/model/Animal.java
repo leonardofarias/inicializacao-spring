@@ -45,6 +45,14 @@ public class Animal {
         this.especie = especie;
     }
 
+    public Animal(Long idAnimal, String nome, LocalDate data, EspecieEnum especie, Cliente cliente) {
+        this.idAnimal = idAnimal;
+        this.nome = nome;
+        this.dataNascimento = new DataNascimento(data);
+        this.especie = especie;
+        this.cliente = cliente;
+    }
+
     public String getNome() {
         return nome;
     }
