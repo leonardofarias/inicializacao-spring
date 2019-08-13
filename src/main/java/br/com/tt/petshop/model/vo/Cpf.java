@@ -31,6 +31,6 @@ public class Cpf {
 
     @Override
     public String toString() {
-        return super.toString();
+        return valor;
     }
 }

@@ -6,12 +6,15 @@ import br.com.tt.petshop.model.Animal;
 
 import br.com.tt.petshop.model.Cliente;
 import br.com.tt.petshop.repository.AnimalRepository;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class AnimalService {
@@ -25,8 +28,28 @@ public class AnimalService {
         this.clienteService = clienteService;
     }
 
-    public List<Animal> listar(Long clienteId){
-        return animalRepository.findByClienteId(clienteId);
+    public List<Animal> listar(Optional<Long> clienteId, Optional<String> nome){
+        if(clienteId.isPresent() && nome.isPresent()){
+            return animalRepository.findByClienteIdAndNomeOrderByNome(clienteId.get(), nome.get());
+        }else if(clienteId.isPresent()){
+            return animalRepository.findByClienteId(clienteId.get());
+        }else if(nome.isPresent()){
+            return animalRepository.findByNome(nome.get());
+        }
+        return animalRepository.findAll();
+    }
+
+    public List<Animal> listarByExample(Optional<Long> clienteId, Optional<String> nome){
+
+        Animal animal = new Animal();
+        if(clienteId.isPresent()){
+            animal.setCliente(new Cliente(clienteId.get()));
+        }
+        if(nome.isPresent()){
+            animal.setNome(nome.get());
+        }
+
+        return animalRepository.findAll(Example.of(animal), Sort.by("nome"));
     }
 
     public List<EspecieEnum> listarEspecies(){
@@ -66,5 +89,9 @@ public class AnimalService {
     public void remover(Animal animal) {
         //TODO alterar no JPA
         animalRepository.delete(animal);
+    }
+
+    public Optional<Animal> findById(Long id){
+        return animalRepository.findById(id);
     }
 }

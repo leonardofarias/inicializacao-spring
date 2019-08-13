@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -40,7 +41,7 @@ public class AnimalServiceTest {
 
     @Test
     public void deveriaRetornarListaVazia() {
-        List<Animal> animais = animalService.listar(1L);
+        List<Animal> animais = animalService.listar(Optional.empty(), Optional.empty());
 
         assertNotNull("A lista não deveria ser nula", animais);
         assertEquals("A lista deveria retornar nenhum animal", 0, animais.size());

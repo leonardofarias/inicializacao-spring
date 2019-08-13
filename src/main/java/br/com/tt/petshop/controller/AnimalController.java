@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class AnimalController {
@@ -23,10 +24,10 @@ public class AnimalController {
     }
 
     @GetMapping("/animais-listar")
-    public String listar(Model model, @RequestParam Long clientId) {
+    public String listar(Model model, @RequestParam Optional<Long> clientId) {
         model.addAttribute("sistema", "PETSHOP");
         model.addAttribute("clientId", clientId);
-        model.addAttribute("animais", animalService.listar(clientId));
+        model.addAttribute("animais", animalService.listar(clientId,null));
         return "animais-listar";
     }
 

@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
@@ -142,7 +143,7 @@ public class ClienteServiceTest {
         when(clienteRepository.getOne(1L)).thenReturn(cliente);
 
         // Act
-        Cliente find = clienteService.buscarCliente(1L);
+        Cliente find = clienteService.buscarCliente(1L).get();
 
         // Assert
         assertNotNull("Deve retornar um cliente com sucesso", find);
@@ -152,7 +153,7 @@ public class ClienteServiceTest {
 
     @Test
     public void deveriaLancarExcecaoQuandoClienteEstaInadimplente() {
-        Cliente cliente = new Cliente(12L, null, null, true);
+        Cliente cliente = new Cliente(12L, null, null, false);
         when(clienteRepository.getOne(12l)).thenReturn(cliente);
         try {
             clienteService.validaClienteInadimplente(12L);
@@ -165,11 +166,11 @@ public class ClienteServiceTest {
 
     @Test
     public void deveriaRetornarOkQuandoClienteEstaAdimplente() {
-        Cliente cliente = new Cliente(12L, null, null, false);
-        when(clienteRepository.getOne(12l)).thenReturn(cliente);
+        Cliente cliente = new Cliente(1L, null, null, false);
+        when(clienteRepository.getOne(1L)).thenReturn(cliente);
         try {
-            clienteService.validaClienteInadimplente(12L);
-            verify(clienteRepository).getOne(12L);
+            clienteService.validaClienteInadimplente(1L);
+            verify(clienteRepository).getOne(1L);
         } catch (BusinessException e) {
             assertEquals("Cliente inadimplente", e.getMessage());
         }

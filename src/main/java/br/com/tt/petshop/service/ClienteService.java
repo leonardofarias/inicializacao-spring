@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 
 @Service
@@ -22,11 +23,11 @@ public class ClienteService {
         return clienteRepository.findAll();
     }
 
-    public void adicionar(Cliente cli) throws BusinessException {
+    public Long adicionar(Cliente cli) throws BusinessException {
         validaNome(cli);
         validaCpf(cli);
         clienteRepository.save(cli);
-
+        return cli.getId();
     }
 
     private void validaNome(Cliente cli) throws BusinessException {
@@ -67,15 +68,23 @@ public class ClienteService {
         clienteRepository.delete(cliente);
     }
 
-    public Cliente buscarCliente(Long id){
-        return clienteRepository.getOne(id);
+    public Optional<Cliente> buscarCliente(Long id){
+        return clienteRepository.findById(id);
     }
 
     public void validaClienteInadimplente(Long clientId) throws BusinessException {
-        Cliente cliente = buscarCliente(clientId);
+        Optional<Cliente> clienteOptional = buscarCliente(clientId);
 
-        if(cliente.getInadimplente()){
-            throw new BusinessException("Cliente inadimplente");
+        if(clienteOptional.isPresent()){
+            Cliente cliente = clienteOptional.get();
+            if(cliente.getInadimplente()){
+                throw new BusinessException("Cliente inadimplente");
+            }
         }
     }
+
+    public void update(Cliente cliente) {
+        clienteRepository.save(cliente);
+    }
+
 }
