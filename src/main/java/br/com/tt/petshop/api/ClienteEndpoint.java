@@ -28,14 +28,10 @@ public class ClienteEndpoint {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity create(@RequestBody ClienteDto clienteDto) {
-        try {
-            Long id = clienteService.adicionar(mapper.map(clienteDto, Cliente.class));
-            URI uri = URI.create(String.format("/clientes/%d", id));
-            return ResponseEntity.created(uri).build();
-        } catch (BusinessException e) {
-            return ResponseEntity.status(500).build();
-        }
+    public ResponseEntity create(@RequestBody ClienteDto clienteDto) throws BusinessException {
+        Long id = clienteService.adicionar(mapper.map(clienteDto, Cliente.class));
+        URI uri = URI.create(String.format("/clientes/%d", id));
+        return ResponseEntity.created(uri).build();
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)

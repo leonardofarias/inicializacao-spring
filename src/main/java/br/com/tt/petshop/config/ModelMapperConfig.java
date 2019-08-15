@@ -12,25 +12,28 @@ public class ModelMapperConfig {
 
     @Bean
     public ModelMapper getBean(){
+        System.out.println("Iniciei o modelmapper");
+
         ModelMapper modelMapper = new ModelMapper();
-
-/*        modelMapper.createTypeMap(Cliente.class, ClienteDto.class)
-                .addMapping(Cliente::getCpf, (clienteDto, o) -> clienteDto.setCpf(((Cpf)o).getValor()));
-
-        modelMapper.createTypeMap(ClienteDto.class, Cliente.class)
-                .addMapping(dto -> new Cpf(dto.getCpf()), Cliente::setCpf);*/
 
         modelMapper
                 .createTypeMap(Cliente.class, ClienteDto.class)
                 .addMapping(
                         cliente -> cliente.getCpf().getValor(),
                         ClienteDto::setCpf);
+//        .addMapping(Cliente::getCpf, (clienteDto, o) ->
+//            clienteDto.setCpf(
+//                    ((Cpf)o).getValor()
+//            )
+//        );
 
         modelMapper
                 .createTypeMap(ClienteDto.class, Cliente.class)
-                .addMapping(clienteDto -> new Cpf(clienteDto.getCpf()),
-                Cliente::setCpf);
-        return new ModelMapper();
+                .addMapping(
+                        ClienteDto::getCpf,
+                        (cliente, o) -> cliente.getCpf().setValor((String) o));
+
+        return modelMapper;
     }
 
 }

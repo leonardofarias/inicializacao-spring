@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class ClienteServiceTest {
 
     @Before
     public void setUp() {
-        clienteService = new ClienteService(clienteRepository);
+        clienteService = new ClienteService(clienteRepository, null);
     }
 
     @Test
@@ -161,7 +160,7 @@ public class ClienteServiceTest {
         } catch (BusinessException e) {
             assertEquals("Cliente inadimplente", e.getMessage());
         }
-        verify(clienteRepository).getOne(12L);
+        verify(clienteRepository).findById(12L);
     }
 
     @Test
@@ -170,7 +169,7 @@ public class ClienteServiceTest {
         when(clienteRepository.getOne(1L)).thenReturn(cliente);
         try {
             clienteService.validaClienteInadimplente(1L);
-            verify(clienteRepository).getOne(1L);
+            verify(clienteRepository).findById(1L);
         } catch (BusinessException e) {
             assertEquals("Cliente inadimplente", e.getMessage());
         }

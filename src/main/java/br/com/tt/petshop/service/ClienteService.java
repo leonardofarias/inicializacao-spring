@@ -1,8 +1,12 @@
 package br.com.tt.petshop.service;
 
+import br.com.tt.petshop.client.CreditoApiClient;
+import br.com.tt.petshop.client.CreditoApiRTClient;
+import br.com.tt.petshop.client.dto.CreditoDto;
 import br.com.tt.petshop.exception.BusinessException;
 import br.com.tt.petshop.model.Cliente;
 import br.com.tt.petshop.repository.ClienteRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,9 +18,12 @@ import java.util.Optional;
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
+    private final CreditoApiClient creditoApiClient;
 
-    public ClienteService(ClienteRepository clienteRepository) {
+    public ClienteService(ClienteRepository clienteRepository,
+                          @Qualifier("feign") CreditoApiClient creditoApiClient) {
         this.clienteRepository = clienteRepository;
+        this.creditoApiClient = creditoApiClient;
     }
 
     public List<Cliente> listar() {
@@ -26,8 +33,17 @@ public class ClienteService {
     public Long adicionar(Cliente cli) throws BusinessException {
         validaNome(cli);
         validaCpf(cli);
+        validaSituacaoCredito(cli.getCpf().getValor());
         clienteRepository.save(cli);
         return cli.getId();
+    }
+
+    private void validaSituacaoCredito(String valor) throws BusinessException{
+        CreditoDto dto = creditoApiClient.verificaSituacao(valor);
+
+        if("NEGATIVADO".equals(dto.getSituacao())){
+            throw new BusinessException("Verifique sua situação com o governo");
+        }
     }
 
     private void validaNome(Cliente cli) throws BusinessException {
@@ -59,6 +75,7 @@ public class ClienteService {
         // }else{
         //     cli.setCpf(cpfTest);
         }
+
     }
 
     public void remover(Long id) {
