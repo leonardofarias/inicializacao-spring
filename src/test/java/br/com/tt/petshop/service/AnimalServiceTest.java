@@ -1,5 +1,6 @@
 package br.com.tt.petshop.service;
 
+import br.com.tt.petshop.dto.ClienteDto;
 import br.com.tt.petshop.enums.EspecieEnum;
 import br.com.tt.petshop.exception.BusinessException;
 import br.com.tt.petshop.model.Animal;
@@ -11,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.modelmapper.ModelMapper;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,9 +36,17 @@ public class AnimalServiceTest {
     @Mock
     private AnimalRepository animalRepository;
 
+    @Mock
+    private ModelMapper mapper;
+
+    private Cliente cliente;
+
     @Before
     public void setUp() {
-        animalService = new AnimalService(animalRepository, clienteService);
+
+        animalService = new AnimalService(animalRepository, clienteService, mapper);
+
+        cliente = new Cliente(1L, "Fulano", "000.111.222-33");
     }
 
     @Test
@@ -72,7 +82,7 @@ public class AnimalServiceTest {
 
     @Test
     public void deveriaAdicionarComSucesso() throws BusinessException {
-        Animal animalAdicionado = new Animal(0L, "TOTO", LocalDate.now(), EspecieEnum.MAMIFERO, new Cliente());
+        Animal animalAdicionado = new Animal("TOTO", LocalDate.now(), EspecieEnum.MAMIFERO,0L);
 
         // Act
         animalService.adicionar(animalAdicionado);
@@ -84,7 +94,7 @@ public class AnimalServiceTest {
     @Test
     public void deveriaLancarExcecaoQuandoNomeEstaVazio() {
         try {
-            Animal animalAdicionado = new Animal(0L, null, LocalDate.now(), EspecieEnum.MAMIFERO, new Cliente());
+            Animal animalAdicionado = new Animal(null, LocalDate.now(), EspecieEnum.MAMIFERO, 0L);
             animalService.adicionar(animalAdicionado);
 
             fail("Deveria lançar exceção quando nome esta vazio");
@@ -96,7 +106,7 @@ public class AnimalServiceTest {
     @Test
     public void deveriaLancarExcecaoQuandoNomeTemMenosQueUmTamanhoMinimoDefinido() {
         try {
-            Animal animalAdicionado = new Animal(0L, "T", LocalDate.now(), EspecieEnum.MAMIFERO, new Cliente());
+            Animal animalAdicionado = new Animal("T", LocalDate.now(), EspecieEnum.MAMIFERO, 0l);
             animalService.adicionar(animalAdicionado);
 
             fail("Deveria lançar exceção quando nome tem menos de 3 letras");
@@ -108,7 +118,7 @@ public class AnimalServiceTest {
     @Test
     public void deveriaLancarExcecaoQuandoDataNascimentoEstaVazia() {
         try {
-            Animal animalAdicionado = new Animal(0L, "TOTO", null, EspecieEnum.MAMIFERO, new Cliente());
+            Animal animalAdicionado = new Animal("TOTO", null, EspecieEnum.MAMIFERO, 0L);
             animalService.adicionar(animalAdicionado);
 
             fail("Deveria lançar exceção quando data está vazia");
@@ -120,7 +130,7 @@ public class AnimalServiceTest {
     @Test
     public void deveriaLancarExcecaoQuandoDataSuperiorHoje() {
         try {
-            Animal animalAdicionado = new Animal(0L, "TOTO", LocalDate.now().plusDays(1L), EspecieEnum.MAMIFERO, new Cliente());
+            Animal animalAdicionado = new Animal("TOTO", LocalDate.now().plusDays(1L), EspecieEnum.MAMIFERO, 0l);
             animalService.adicionar(animalAdicionado);
 
             fail("Deveria lançar exceção quando data está superior a Hoje");
@@ -132,25 +142,29 @@ public class AnimalServiceTest {
     @Test
     public void deveriaLancarExcecaoAoSalvarAnimalQuandoClienteEstaInadimplente() throws BusinessException {
         //EM MÉTODOS VOID PARA RETORNAR EXCEÇÃO
-        //doThrow(BusinessException.class).when(clienteService).validaClienteInadimplente(1l);
+        //Given
+        doThrow(BusinessException.class).when(clienteService).validaClienteInadimplente(cliente.getId());
         Animal animal = null;
         try {
-            Animal animalAdicionado = new Animal(0L, "TOTO", LocalDate.now(), EspecieEnum.MAMIFERO);
+            animal = new Animal("TOTO", LocalDate.now(), EspecieEnum.MAMIFERO, 0L);
+            //When
             animalService.adicionar(animal);
             fail("Deveria lançar exceção quando cliente esta inadimplente");
         } catch (BusinessException e) {
+            //Then
             assertNotNull(e);
             verify(animalRepository, times(0)).save(animal);
+            verify(clienteService, times(1)).validaClienteInadimplente(cliente.getId());
         }
     }
 
     @Test
     public void deveriaRemoverComSucesso() {
         // Act
-        animalService.remover(new Animal(0L, "Toto", LocalDate.now(), EspecieEnum.MAMIFERO));
+        animalService.remover(new Animal("Toto", LocalDate.now(), EspecieEnum.MAMIFERO, 0L));
 
         // Assert
-        Animal animalDeletado = new Animal(0L, "Toto", LocalDate.now(), EspecieEnum.MAMIFERO);
+        Animal animalDeletado = new Animal("Toto", LocalDate.now(), EspecieEnum.MAMIFERO, 0L);
         verify(animalRepository).delete(animalDeletado);
         verifyNoMoreInteractions(animalRepository);
     }

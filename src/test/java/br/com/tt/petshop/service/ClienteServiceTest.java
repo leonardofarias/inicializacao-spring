@@ -1,5 +1,7 @@
 package br.com.tt.petshop.service;
 
+import br.com.tt.petshop.client.CreditoApiClient;
+import br.com.tt.petshop.client.dto.CreditoDto;
 import br.com.tt.petshop.exception.BusinessException;
 import br.com.tt.petshop.model.Cliente;
 import br.com.tt.petshop.repository.ClienteRepository;
@@ -11,6 +13,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -21,15 +24,20 @@ public class ClienteServiceTest {
     private ClienteService clienteService;
     @Mock
     private ClienteRepository clienteRepository;
+    @Mock
+    private CreditoApiClient client;
+    private CreditoDto dto;
 
     @Before
-    public void setUp() {
-        clienteService = new ClienteService(clienteRepository, null);
+    public void setUp() throws BusinessException {
+        dto = new CreditoDto();
+        dto.setSituacao("NORMAL");
+
+        clienteService = new ClienteService(clienteRepository, client);
     }
 
     @Test
-    public void deveriaRetornarListaVazia() {
-
+    public void deveriaRetornarListaVazia() throws BusinessException {
         List<Cliente> clientes = clienteService.listar();
 
         assertNotNull("A lista não deveria ser nula", clientes);
@@ -37,11 +45,11 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void deveriaRetornarListaComClientes() {
+    public void deveriaRetornarListaComClientes() throws BusinessException {
         // Arrange - Setup
         ArrayList<Cliente> listaCliente = new ArrayList<>();
-        listaCliente.add(new Cliente(1L, "Fulano", "000.111.222-33", false));
-        listaCliente.add(new Cliente(2L, "Sicrano", "000.123.222-33", true));
+        listaCliente.add(new Cliente(1L, "Fulano", "000.111.222-33"));
+        listaCliente.add(new Cliente(2L, "Sicrano", "000.123.222-33"));
         when(clienteRepository.findAll()).thenReturn(listaCliente);
 
         // Act - Execução
@@ -58,14 +66,16 @@ public class ClienteServiceTest {
         clienteService.remover(12L);
 
         // Assert
-        Cliente clienteDeletado = new Cliente(12L, null, null, false);
+        Cliente clienteDeletado = new Cliente(12L, null, null);
         verify(clienteRepository).delete(clienteDeletado);
         verifyNoMoreInteractions(clienteRepository);
     }
 
     @Test
     public void deveriaAdicionarComSucesso() throws BusinessException {
-        Cliente clienteAdicionado = new Cliente(1L, "Leonardo Silva", "01773449036", false);
+        when(client.verificaSituacao(anyString())).thenReturn(dto);
+
+        Cliente clienteAdicionado = new Cliente(1L, "Leonardo Silva", "01773449036");
         // Act
         clienteService.adicionar(clienteAdicionado);
 
@@ -76,7 +86,7 @@ public class ClienteServiceTest {
     @Test
     public void deveriaLancarExcecaoQuandoNomeEstaVazio() {
         try {
-            Cliente clienteAdicionado = new Cliente(1L, null, "01773449036", false);
+            Cliente clienteAdicionado = new Cliente(1L, null, "01773449036");
             clienteService.adicionar(clienteAdicionado);
 
             fail("Deveria lançar exceção quando nome esta vazio");
@@ -88,7 +98,7 @@ public class ClienteServiceTest {
     @Test
     public void deveriaLancarExcecaoQuandoNomeTemMenosDeDuasLetras() {
         try {
-            Cliente clienteAdicionado = new Cliente(1L, "L", "01773449036", false);
+            Cliente clienteAdicionado = new Cliente(1L, "L", "01773449036");
             clienteService.adicionar(clienteAdicionado);
 
             fail("Deveria lançar exceção quando nome tem menos de duas letras");
@@ -100,7 +110,7 @@ public class ClienteServiceTest {
     @Test
     public void deveriaLancarExcecaoQuandoNomeNaoTemSobrenomeeTemMaisDeDuasLetras() {
         try {
-            Cliente clienteAdicionado = new Cliente(1L, "Le", "01773449036", false);
+            Cliente clienteAdicionado = new Cliente(1L, "Le", "01773449036");
             clienteService.adicionar(clienteAdicionado);
 
             fail("Deveria lançar exceção quando nome não tem sobrenome e tem mais de duas letras");
@@ -114,7 +124,7 @@ public class ClienteServiceTest {
     @Test
     public void deveriaLancarExcecaoQuandoCpfEstaVazio() {
         try {
-            Cliente clienteAdicionado = new Cliente(1L, "Leonardo Silva", null, false);
+            Cliente clienteAdicionado = new Cliente(1L, "Leonardo Silva", null);
             clienteService.adicionar(clienteAdicionado);
 
             fail("Deveria lançar exceção quando cpf está vazio");
@@ -126,7 +136,7 @@ public class ClienteServiceTest {
     @Test
     public void deveriaLancarExcecaoQuandoCpfEstaIncorreto() {
         try {
-            Cliente clienteAdicionado = new Cliente(1L, "Leonardo Silva", "0177349", false);
+            Cliente clienteAdicionado = new Cliente(1L, "Leonardo Silva", "0177349");
             clienteService.adicionar(clienteAdicionado);
 
             fail("Deveria lançar exceção quando cpf está incorreto");
@@ -138,8 +148,8 @@ public class ClienteServiceTest {
     @Test
     public void deveriaBuscarClienteComSucesso() {
         // Arrange - Setup
-        Cliente cliente = new Cliente(1L, "Fulano", "000.111.222-33", false);
-        when(clienteRepository.getOne(1L)).thenReturn(cliente);
+        Cliente cliente = new Cliente(1L, "Fulano", "000.111.222-33");
+        when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
 
         // Act
         Cliente find = clienteService.buscarCliente(1L).get();
@@ -152,8 +162,8 @@ public class ClienteServiceTest {
 
     @Test
     public void deveriaLancarExcecaoQuandoClienteEstaInadimplente() {
-        Cliente cliente = new Cliente(12L, null, null, false);
-        when(clienteRepository.getOne(12l)).thenReturn(cliente);
+        Cliente cliente = new Cliente(12L, null, null);
+        when(clienteRepository.findById(12l)).thenReturn(Optional.of(cliente));
         try {
             clienteService.validaClienteInadimplente(12L);
             fail("Deveria retornar cliente inadimplente");
@@ -165,8 +175,9 @@ public class ClienteServiceTest {
 
     @Test
     public void deveriaRetornarOkQuandoClienteEstaAdimplente() {
-        Cliente cliente = new Cliente(1L, null, null, false);
-        when(clienteRepository.getOne(1L)).thenReturn(cliente);
+        Cliente cliente = new Cliente(1L, null, null);
+        cliente.setInadimplente(true);
+        when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
         try {
             clienteService.validaClienteInadimplente(1L);
             verify(clienteRepository).findById(1L);

@@ -1,21 +1,27 @@
 package br.com.tt.petshop.api;
 
+import br.com.tt.petshop.api.groups.OnPost;
 import br.com.tt.petshop.dto.AnimalDto;
+import br.com.tt.petshop.exception.BusinessException;
+import br.com.tt.petshop.exception.ClientNotFoundException;
+import br.com.tt.petshop.exception.dto.ApiErrorDto;
 import br.com.tt.petshop.model.Animal;
 import br.com.tt.petshop.service.AnimalService;
 import io.swagger.annotations.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "animais")
-@Api("Animal Controller")
+@Api(tags = "Animal", description = "Animal Controller")
 public class AnimalEndpoint {
 
     private final AnimalService animalService;
@@ -36,19 +42,44 @@ public class AnimalEndpoint {
             @ApiParam("id do cliente para filtro")
             @RequestParam Optional<Long> clienteId,
             @ApiParam("Nome do animal")
-            @RequestParam Optional<String> nome){
+            @RequestParam Optional<String> nome) {
         return ResponseEntity.ok(animalService.listar(clienteId, nome).stream()
                 .map(animal -> mapper.map(animal, AnimalDto.class))
                 .collect(Collectors.toList()));
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AnimalDto> findById(@PathVariable Long id){
+    public ResponseEntity<AnimalDto> findById(@PathVariable Long id) {
         Optional<Animal> animalOptional = animalService.findById(id);
-        if(animalOptional.isPresent()){
+        if (animalOptional.isPresent()) {
             AnimalDto dto = mapper.map(animalOptional.get(), AnimalDto.class);
             return ResponseEntity.ok(dto);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    @ApiOperation("Salva um animal")
+    public ResponseEntity create(
+            @ApiParam("Informações do animal a ser criado")
+            @RequestBody @Validated(OnPost.class) AnimalDto animalDto)
+            throws BusinessException {
+
+        Animal animalCriado = animalService.salvar(animalDto);
+
+        URI location = URI.create(String.format("/animais/%d", animalCriado.getId()));
+        return ResponseEntity.created(location).build();
+    }
+
+    @ExceptionHandler(ClientNotFoundException.class)
+    public ResponseEntity handleClienteNotFoundException(ClientNotFoundException e) {
+
+        ApiErrorDto dto = new ApiErrorDto(
+                "cliente_nao_existe",
+                String.format("O cliente com id: %s não foi encontrado!", e.getClientId()));
+
+        return ResponseEntity
+                .unprocessableEntity()
+                .body(dto);
     }
 }

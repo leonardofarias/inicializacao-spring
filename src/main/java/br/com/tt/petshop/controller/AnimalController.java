@@ -56,9 +56,9 @@ public class AnimalController {
     }
 
     @GetMapping("/animal-excluir")
-    public RedirectView clienteExcluir(@RequestParam Long idAnimal, @RequestParam Long clientId){
+    public RedirectView clienteExcluir(@RequestParam Long id, @RequestParam Long clientId){
         Animal animal = new Animal();
-        animal.setIdAnimal(idAnimal);
+        animal.setId(id);
         animalService.remover(animal);
         return new RedirectView("/animais-listar?clientId=" + clientId);
     }

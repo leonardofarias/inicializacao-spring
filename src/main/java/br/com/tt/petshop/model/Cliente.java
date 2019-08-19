@@ -32,17 +32,18 @@ public class Cliente {
 
     public Cliente(){
         this.inadimplente = Boolean.FALSE;
+        this.cpf = new Cpf(null);
     }
 
-    public Cliente(Long id) {
+    public Cliente(Long id){
         this.id = id;
     }
 
-    public Cliente(Long id, String nome, String cpf, Boolean inadimplente) {
+    public Cliente(Long id, String nome, String cpf) {
         this.id = id;
         this.nome = nome;
         this.cpf = new Cpf(cpf);
-        this.inadimplente = inadimplente;
+        this.inadimplente = Boolean.FALSE;
     }
 
     public String getNome() {

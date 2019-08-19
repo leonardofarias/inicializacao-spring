@@ -4,6 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
 
 @Embeddable
@@ -11,6 +12,7 @@ public class DataNascimento {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name = "data_nascimento")
+    @PastOrPresent
     private LocalDate data;
 
     public DataNascimento() {

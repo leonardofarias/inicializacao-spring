@@ -5,6 +5,8 @@ import br.com.tt.petshop.model.vo.DataNascimento;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -15,13 +17,16 @@ public class Animal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "codigo")
-    private Long idAnimal;
+    private Long id;
 
+    @NotBlank
     private String nome;
 
     @Embedded
     private DataNascimento dataNascimento;
+
     @Enumerated(EnumType.STRING)
+    @NotNull
     private EspecieEnum especie;
 
     @ManyToOne
@@ -41,19 +46,11 @@ public class Animal {
         this.dataNascimento = new DataNascimento();
     }
 
-    public Animal(Long idAnimal, String nome, LocalDate data, EspecieEnum especie) {
-        this.idAnimal = idAnimal;
+    public Animal(String nome, LocalDate data, EspecieEnum especie, Long clienteId) {
         this.nome = nome;
         this.dataNascimento = new DataNascimento(data);
         this.especie = especie;
-    }
-
-    public Animal(Long idAnimal, String nome, LocalDate data, EspecieEnum especie, Cliente cliente) {
-        this.idAnimal = idAnimal;
-        this.nome = nome;
-        this.dataNascimento = new DataNascimento(data);
-        this.especie = especie;
-        this.cliente = cliente;
+        this.cliente = new Cliente(clienteId, null, null);
     }
 
     public String getNome() {
@@ -80,14 +77,6 @@ public class Animal {
         this.especie = especie;
     }
 
-    public Long getIdAnimal() {
-        return idAnimal;
-    }
-
-    public void setIdAnimal(Long idAnimal) {
-        this.idAnimal = idAnimal;
-    }
-
     public Cliente getCliente() {
         return cliente;
     }
@@ -112,16 +101,11 @@ public class Animal {
         this.produtos = produtos;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Animal animal = (Animal) o;
-        return Objects.equals(idAnimal, animal.idAnimal);
+    public Long getId() {
+        return id;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(idAnimal);
+    public void setId(Long id) {
+        this.id = id;
     }
 }
