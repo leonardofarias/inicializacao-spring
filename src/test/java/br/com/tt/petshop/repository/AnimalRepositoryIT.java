@@ -40,7 +40,7 @@ public class AnimalRepositoryIT {
     @Test
     public void deveriaRetornarUmAnimal() {
         List<Animal> list = animalRepository.findByClienteId(133L);
-        Assert.assertEquals("Deveria retornar um animal", 1, list.size());
+        Assert.assertEquals("Deveria retornar um animal", 2, list.size());
         Animal rex = list.get(0);
         Assert.assertEquals("O nome deveria ser Rex", "Rex", rex.getNome());
         Assert.assertEquals("O cliente deveria ser o 133", Long.valueOf(133), rex.getCliente().getId());

@@ -38,15 +38,19 @@ public class AnimalService {
         this.mapper = mapper;
     }
 
+    public List<Animal> listar(Long clientId){
+        return animalRepository.findByClienteId(clientId);
+    }
+
     public List<Animal> listar(Optional<Long> clienteId, Optional<String> nome){
-        if(clienteId.isPresent() && nome.isPresent()){
-            return animalRepository.findByClienteIdAndNomeOrderByNome(clienteId.get(), nome.get());
-        }else if(clienteId.isPresent()){
-            return animalRepository.findByClienteId(clienteId.get());
-        }else if(nome.isPresent()){
-            return animalRepository.findByNome(nome.get());
+        Animal animal = new Animal();
+        if (clienteId.isPresent()) {
+            animal.setCliente(new Cliente(clienteId.get()));;
         }
-        return animalRepository.findAll();
+        if (nome.isPresent()) {
+            animal.setNome(nome.get());
+        }
+        return animalRepository.findAll(Example.of(animal), Sort.by("nome"));
     }
 
     public List<Animal> listarByExample(Optional<Long> clienteId, Optional<String> nome){

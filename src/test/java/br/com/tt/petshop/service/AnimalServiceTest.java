@@ -5,6 +5,7 @@ import br.com.tt.petshop.enums.EspecieEnum;
 import br.com.tt.petshop.exception.BusinessException;
 import br.com.tt.petshop.model.Animal;
 import br.com.tt.petshop.model.Cliente;
+import br.com.tt.petshop.model.vo.Cpf;
 import br.com.tt.petshop.model.vo.DataNascimento;
 import br.com.tt.petshop.repository.AnimalRepository;
 import org.junit.Before;
@@ -46,7 +47,8 @@ public class AnimalServiceTest {
 
         animalService = new AnimalService(animalRepository, clienteService, mapper);
 
-        cliente = new Cliente(1L, "Fulano", "000.111.222-33");
+        cliente = new Cliente(1L, "Fulano", new Cpf("000.111.222-33"), true);
+
     }
 
     @Test
@@ -59,17 +61,18 @@ public class AnimalServiceTest {
 
     @Test
     public void deveriaRetornarListaComAnimais() {
-        // Arrange - Setup
-//        List<Animal> listaAnimais = new ArrayList<>(Arrays.asList(
-//                new Animal(0L, "Rex", LocalDate.now(), EspecieEnum.MAMIFERO, 1L)));
-//        when(animalRepository.findAll()).thenReturn(listaAnimais);
-//
-//        // Act - Execução
-//        List<Animal> animais = animalService.listar(1L);
-//
-//        // Assert - Verificação
-//        assertEquals("Deveria retornar 1 animal", 1, animais.size());
-//        assertEquals("Deveria retornar o Rex", "Rex", animais.get(0).getNome());
+        //Arrange - Setup
+        List<Animal> listaAnimais = new ArrayList<>(Arrays.asList(
+                new Animal("Rex", LocalDate.now(), EspecieEnum.MAMIFERO, 1L)));
+        when(animalRepository.findByClienteId(1L)).thenReturn(listaAnimais);
+
+        //Pq não funcionou o findAll()
+        // Act - Execução
+        List<Animal> animais = animalService.listar(1L);
+
+        // Assert - Verificação
+        assertEquals("Deveria retornar 1 animal", 1, animais.size());
+        assertEquals("Deveria retornar o Rex", "Rex", animais.get(0).getNome());
     }
 
     @Test
@@ -118,7 +121,8 @@ public class AnimalServiceTest {
     @Test
     public void deveriaLancarExcecaoQuandoDataNascimentoEstaVazia() {
         try {
-            Animal animalAdicionado = new Animal("TOTO", null, EspecieEnum.MAMIFERO, 0L);
+            Animal animalAdicionado = new Animal("TOTO", null, EspecieEnum.MAMIFERO, 1L);
+            animalAdicionado.setDataNascimento(null);
             animalService.adicionar(animalAdicionado);
 
             fail("Deveria lançar exceção quando data está vazia");
@@ -146,7 +150,7 @@ public class AnimalServiceTest {
         doThrow(BusinessException.class).when(clienteService).validaClienteInadimplente(cliente.getId());
         Animal animal = null;
         try {
-            animal = new Animal("TOTO", LocalDate.now(), EspecieEnum.MAMIFERO, 0L);
+            animal = new Animal("TOTO", LocalDate.now(), EspecieEnum.MAMIFERO, cliente.getId());
             //When
             animalService.adicionar(animal);
             fail("Deveria lançar exceção quando cliente esta inadimplente");
@@ -160,11 +164,13 @@ public class AnimalServiceTest {
 
     @Test
     public void deveriaRemoverComSucesso() {
+        // Arrange
+        Animal animalDeletado = new Animal("Toto", LocalDate.now(), EspecieEnum.MAMIFERO, 1L);
+
         // Act
-        animalService.remover(new Animal("Toto", LocalDate.now(), EspecieEnum.MAMIFERO, 0L));
+        animalService.remover(animalDeletado);
 
         // Assert
-        Animal animalDeletado = new Animal("Toto", LocalDate.now(), EspecieEnum.MAMIFERO, 0L);
         verify(animalRepository).delete(animalDeletado);
         verifyNoMoreInteractions(animalRepository);
     }

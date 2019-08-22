@@ -26,12 +26,10 @@ public class ClienteEndpointE2E {
     private ClienteRepository clienteRepository;
 
     @Test
-    @Sql("classpath:e2e/insere_fulano.sql")
+    @Sql(value = "classpath:e2e/insere_fulano.sql")
     public void obtemClienteFulanoComSucesso() throws Exception {
 
-        Cliente clienteSalvo = clienteRepository.save(new Cliente(1L, "Fulano", "00011122233"));
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/clientes/1"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(CoreMatchers.equalTo(1)));
+        mockMvc.perform(MockMvcRequestBuilders.get("/clientes/66"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(CoreMatchers.equalTo(135)));
     }
 }

@@ -162,7 +162,7 @@ public class ClienteServiceTest {
 
     @Test
     public void deveriaLancarExcecaoQuandoClienteEstaInadimplente() {
-        Cliente cliente = new Cliente(12L, null, null);
+        Cliente cliente = new Cliente(12L, null, null, true);
         when(clienteRepository.findById(12l)).thenReturn(Optional.of(cliente));
         try {
             clienteService.validaClienteInadimplente(12L);

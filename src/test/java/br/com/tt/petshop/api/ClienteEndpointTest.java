@@ -3,16 +3,13 @@ package br.com.tt.petshop.api;
 import br.com.tt.petshop.config.ModelMapperConfig;
 import br.com.tt.petshop.dto.ClienteDto;
 import br.com.tt.petshop.dto.factory.ClienteDtoFactory;
-import br.com.tt.petshop.exception.BusinessException;
 import br.com.tt.petshop.model.Cliente;
 import br.com.tt.petshop.service.ClienteService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -75,16 +72,15 @@ public class ClienteEndpointTest {
 
         Mockito.when(clienteService.adicionar(clienteSalvar)).thenReturn(clienteSalvar);
 
-        byte[] objectToJson = new ObjectMapper().writeValueAsBytes(
-                new Cliente(72L, "Fulano Silva", "00011122233"));
-
         ClienteDto clienteDto = ClienteDtoFactory.from(clienteSalvar);
+
+        byte[] objectToJson = new ObjectMapper().writeValueAsBytes(clienteDto);
 
         mockMvc.perform(
                 MockMvcRequestBuilders
                         .post("/clientes")
                         .content(objectToJson)
-                        .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+                        .header("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE)
         ).andExpect(MockMvcResultMatchers.status().isCreated())
         .andExpect(header().string("Location", "/clientes/56"))
         .andExpect(content().string(""));
