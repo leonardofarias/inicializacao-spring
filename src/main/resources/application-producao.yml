@@ -1,0 +1,3 @@
+api:
+  credito-api:
+    url: https://imersao-credito-api-prod.herokuapp.com/

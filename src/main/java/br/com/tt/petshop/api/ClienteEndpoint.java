@@ -30,8 +30,8 @@ public class ClienteEndpoint {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity create(@RequestBody @Valid ClienteDto clienteDto) throws BusinessException {
-        Long id = clienteService.adicionar(mapper.map(clienteDto, Cliente.class));
-        URI uri = URI.create(String.format("/clientes/%d", id));
+        Cliente cliente = clienteService.adicionar(mapper.map(clienteDto, Cliente.class));
+        URI uri = URI.create(String.format("/clientes/%d", cliente.getId()));
         return ResponseEntity.created(uri).build();
     }
 

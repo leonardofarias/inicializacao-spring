@@ -30,12 +30,12 @@ public class ClienteService {
         return clienteRepository.findAll();
     }
 
-    public Long adicionar(Cliente cli) throws BusinessException {
+    public Cliente adicionar(Cliente cli) throws BusinessException {
         validaNome(cli);
         validaCpf(cli);
         validaSituacaoCredito(cli.getCpf().getValor());
         clienteRepository.save(cli);
-        return cli.getId();
+        return cli;
     }
 
     private void validaSituacaoCredito(String valor) throws BusinessException{
