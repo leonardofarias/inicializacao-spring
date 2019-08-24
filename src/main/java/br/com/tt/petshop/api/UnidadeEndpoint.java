@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/unidades")
+@RequestMapping("/unidades")
 public class UnidadeEndpoint {
 
     private final UnidadeService unidadeService;

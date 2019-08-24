@@ -8,6 +8,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,7 +19,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("clientes")
+@RequestMapping("/clientes")
+//@PreAuthorize("hasAuthority('boss')")
 public class ClienteEndpoint {
 
     private final ClienteService clienteService;
@@ -37,6 +40,9 @@ public class ClienteEndpoint {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ClienteDto>> findAll(){
+
+        System.out.println(SecurityContextHolder.getContext().getAuthentication());
+
         return ResponseEntity.ok(clienteService.listar().stream()
                 .map(cliente -> mapper.map(cliente, ClienteDto.class))
                 .collect(Collectors.toList()));

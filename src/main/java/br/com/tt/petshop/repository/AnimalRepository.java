@@ -3,6 +3,7 @@ package br.com.tt.petshop.repository;
 import br.com.tt.petshop.enums.EspecieEnum;
 import br.com.tt.petshop.model.Animal;
 import br.com.tt.petshop.model.Cliente;
+import br.com.tt.petshop.model.projection.AnimalSimples;
 import br.com.tt.petshop.model.vo.DataNascimento;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -21,6 +22,8 @@ public interface AnimalRepository extends JpaRepository<Animal, Long> {
     List<Animal> findByClienteIdAndNomeOrderByNome(Long aLong, String s);
 
     List<Animal> findByClienteUnidadeId(Long unidadeId);
+
+    List<AnimalSimples> findByDataNascimentoData(LocalDate dataNascimento);
 
 //    List<Animal> animais = new ArrayList<>(Arrays.asList(
 //            new Animal(idAnimal, "Rex", LocalDate.now(), EspecieEnum.MAMIFERO, 1L),

@@ -7,6 +7,7 @@ import br.com.tt.petshop.exception.ClientNotFoundException;
 import br.com.tt.petshop.model.Animal;
 
 import br.com.tt.petshop.model.Cliente;
+import br.com.tt.petshop.model.projection.AnimalSimples;
 import br.com.tt.petshop.model.vo.DataNascimento;
 import br.com.tt.petshop.repository.AnimalRepository;
 import org.modelmapper.ModelMapper;
@@ -17,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -119,5 +121,9 @@ public class AnimalService {
         //animal.setCliente(cliente.orElseThrow(ClientNotFoundException::new));
         animal.setCliente(cliente.orElseThrow(() -> new ClientNotFoundException(animalDto.getClienteId())));
         return adicionar(animal);
+    }
+
+    public List<AnimalSimples> listarSimples(LocalDate dataNascimento) {
+        return animalRepository.findByDataNascimentoData(dataNascimento);
     }
 }

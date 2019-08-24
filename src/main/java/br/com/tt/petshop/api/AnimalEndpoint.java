@@ -6,21 +6,25 @@ import br.com.tt.petshop.exception.BusinessException;
 import br.com.tt.petshop.exception.ClientNotFoundException;
 import br.com.tt.petshop.exception.dto.ApiErrorDto;
 import br.com.tt.petshop.model.Animal;
+import br.com.tt.petshop.model.projection.AnimalSimples;
 import br.com.tt.petshop.service.AnimalService;
 import io.swagger.annotations.*;
 import org.modelmapper.ModelMapper;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@CrossOrigin("*")
 @RestController
-@RequestMapping(value = "animais")
+@RequestMapping("/animais")
 @Api(tags = "Animal", description = "Animal Controller")
 public class AnimalEndpoint {
 
@@ -81,5 +85,11 @@ public class AnimalEndpoint {
         return ResponseEntity
                 .unprocessableEntity()
                 .body(dto);
+    }
+
+    //Talvez mereça outro endpoint....
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/simplificado")
+    public ResponseEntity<List<AnimalSimples>> listar(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataNascimento) {
+        return ResponseEntity.ok(animalService.listarSimples(dataNascimento));
     }
 }

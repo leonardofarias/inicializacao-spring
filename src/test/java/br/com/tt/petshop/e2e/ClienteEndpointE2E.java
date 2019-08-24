@@ -6,6 +6,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
@@ -16,7 +17,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(secure = false)
+@AutoConfigureTestDatabase
 public class ClienteEndpointE2E {
 
     @Autowired
@@ -29,7 +31,7 @@ public class ClienteEndpointE2E {
     @Sql(value = "classpath:e2e/insere_fulano.sql")
     public void obtemClienteFulanoComSucesso() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/clientes/66"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/clientes/135"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(CoreMatchers.equalTo(135)));
     }
 }
